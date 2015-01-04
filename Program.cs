@@ -31,11 +31,26 @@ namespace 数据转换
                 Thread.Sleep(5000);
                 return;
             }
-            Console.WriteLine("请输入基金编号的开始字符：如 7");
+            Console.WriteLine("请问是手动输入基金编号的开始字符，还是通过文件输入？（Y为手动输入，N为文件输入[文件为fundnumberstartlist.txt]）");
+            string inputways = Console.ReadLine();
+            List<string> startlist = new List<string>();
+            if (inputways.StartsWith("Y"))
+            {
+                Console.WriteLine("请输入基金编号的开始字符：如 7");
+                startlist.Add(Console.ReadLine());
+            }
+            else
+            {
+                startlist = GetStartList();
+            }
 
-            string startwith = Console.ReadLine();
+            int resultcount = 0, noresultcount = 0, index = 0;
+            int count_txt = 0;
+            int count_no_txt = 0;
+            int sum = 0;
+
             #region CSV数据处理
-            int resultcount = 0, noresultcount = 0, index = 1;
+            Console.WriteLine("以下是CSV文件夹下的数据：");
             if (File.Exists("csv/data.csv"))
             {
                 StreamReader reader = new StreamReader("csv/data.csv");
@@ -46,20 +61,31 @@ namespace 数据转换
                 while ((line = reader.ReadLine()) != null)
                 {
                     string[] accessionNumberandFund = fund.GetAccessionNumberAndFund(line);
-                    if (accessionNumberandFund != null && fund.IsContain(fund.FundNames, startwith, accessionNumberandFund[1].Replace("\"", "")))
+                    bool ismatch = false;
+                    foreach (string startwith in startlist)
                     {
-                        //匹配
+
+                        if (accessionNumberandFund != null && fund.IsContain(fund.FundNames, startwith, accessionNumberandFund[1].Replace("\"", "")))
+                        {
+                            //匹配
+                            ismatch = true;
+                            break;
+
+                        }
+                    }
+                    index++;
+                    if (ismatch)
+                    {
                         resultcount++;
                         resultWriter.WriteLine(line);
-                        Console.WriteLine("{0} {1} [满足]", index++, accessionNumberandFund[0]);
-
+                        Console.WriteLine("{0} {1} [满足]", index, accessionNumberandFund[0]);
                     }
                     else
                     {
                         noresultcount++;
-                        index++;
                         noresultWriter.WriteLine(line);
                     }
+
                 }
                 resultWriter.Flush();
                 noresultWriter.Flush();
@@ -67,25 +93,21 @@ namespace 数据转换
                 resultWriter.Close();
                 noresultWriter.Close();
                 reader.Close();
-
-                Thread.Sleep(1000);
-                Console.WriteLine();
-
             }
             else
             {
                 Console.WriteLine("CSV无数据");
+
             }
             #endregion
-
+            Console.WriteLine();
+            Console.WriteLine("以下是Txt文件下的数据(wos)");
             #region TXT数据处理
             DirectoryInfo directorInfo = new DirectoryInfo("TXT");
             FileInfo[] fileInfos = directorInfo.GetFiles("*.txt");
             StreamWriter resultWriter1 = new StreamWriter("OUTPUT/result_txt.csv", false);
             StreamWriter noresultWriter1 = new StreamWriter("OUTPUT/noresult_txt.csv", false);
-            int count_txt = 0;
-            int count_no_txt = 0;
-            int sum = 0;
+            int txtindex = 0;
             if (fileInfos != null && fileInfos.Length > 1)
             {
                 foreach (var fileinfo in fileInfos)
@@ -94,10 +116,21 @@ namespace 数据转换
                     sum += fundings.Count;
                     foreach (var fd in fundings)
                     {
+                        bool ismatch = false;
                         string[] accessionNumberandFund = fund.GetAccessionNumberAndFund(fd);
-                        if (accessionNumberandFund != null && fund.IsContain(fund.FundNames, startwith, accessionNumberandFund[1].Replace("\"", "")))
+                        foreach (string startwith in startlist)
                         {
-                            Console.WriteLine("{0}[满足]", accessionNumberandFund[0]);
+                            if (accessionNumberandFund != null && fund.IsContain(fund.FundNames, startwith, accessionNumberandFund[1].Replace("\"", "")))
+                            {
+                                ismatch = true;
+                                break;
+                            }
+
+                        }
+                        txtindex++;
+                        if (ismatch)
+                        {
+                            Console.WriteLine("{0} {1}[满足]", txtindex, accessionNumberandFund[0]);
                             resultWriter1.WriteLine(fd);
                             count_txt++;
                         }
@@ -123,16 +156,31 @@ namespace 数据转换
             noresultWriter1.Flush();
             noresultWriter1.Close();
             #endregion
+
             Console.WriteLine();
-            Console.WriteLine("CSV总共记录：{0}\r\n满足要求：{1}     \r\n不满足要求：{2}", index - 1, resultcount, noresultcount);
+            Console.WriteLine("CSV总共记录：{0}\r\n满足要求：{1}     \r\n不满足要求：{2}", index, resultcount, noresultcount);
             Console.WriteLine();
             Console.WriteLine("TXT总共记录：{0}\r\n满足要求：{1}     \r\n不满足要求：{2}", sum, count_txt, count_no_txt);
             Console.WriteLine();
             Thread.Sleep(2000);
-            Console.WriteLine("给个赞好不？");
+            Console.WriteLine("键盘输入将自动关闭，请记得去OUTPUT文件下查看输出结果");
 
 
             Console.ReadKey();
+        }
+        static List<string> GetStartList()
+        {
+            List<string> list = new List<string>();
+            string filename = "fundnumberstartlist.txt";
+            using (StreamReader reader = new StreamReader(filename))
+            {
+                string line = string.Empty;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    list.Add(line.Trim());
+                }
+            }
+            return list;
         }
         static Dictionary<string, bool> InitialFundNames(string filename)
         {
@@ -398,7 +446,7 @@ namespace 数据转换
                         string[] temp3 = temp[1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                         for (int h = 0; h < temp3.Length; h++)
                         {
-                            if (temp3[h].ToLower().TrimStart().StartsWith(startwith))
+                            if (temp3[h].TrimStart().StartsWith(startwith))
                             {
                                 return true;
                             }

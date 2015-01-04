@@ -8,3 +8,8 @@ F:\兴趣项目\数据转换\obj\Debug\数据转换.pdb
 F:\兴趣项目\数据转换\bin\Debug\数据转换.exe
 F:\兴趣项目\数据转换\bin\Debug\数据转换.pdb
 F:\兴趣项目\数据转换\obj\Debug\数据转换.csprojResolveAssemblyReference.cache
+F:\兴趣项目\数据转换\FundFilter\obj\Debug\数据转换.exe
+F:\兴趣项目\数据转换\FundFilter\obj\Debug\数据转换.pdb
+F:\兴趣项目\数据转换\FundFilter\obj\Debug\数据转换.csprojResolveAssemblyReference.cache
+F:\兴趣项目\数据转换\FundFilter\bin\Debug\数据转换.exe
+F:\兴趣项目\数据转换\FundFilter\bin\Debug\数据转换.pdb
