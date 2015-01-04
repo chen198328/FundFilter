@@ -1,0 +1,10 @@
+F:\兴趣项目\移动互联网实验室\ReadMore4Science\数据转换\数据转换\bin\Debug\数据转换.exe
+F:\兴趣项目\移动互联网实验室\ReadMore4Science\数据转换\数据转换\bin\Debug\数据转换.pdb
+F:\兴趣项目\移动互联网实验室\ReadMore4Science\数据转换\数据转换\obj\Debug\数据转换.csprojResolveAssemblyReference.cache
+F:\兴趣项目\移动互联网实验室\ReadMore4Science\数据转换\数据转换\obj\Debug\数据转换.exe
+F:\兴趣项目\移动互联网实验室\ReadMore4Science\数据转换\数据转换\obj\Debug\数据转换.pdb
+F:\兴趣项目\数据转换\obj\Debug\数据转换.exe
+F:\兴趣项目\数据转换\obj\Debug\数据转换.pdb
+F:\兴趣项目\数据转换\bin\Debug\数据转换.exe
+F:\兴趣项目\数据转换\bin\Debug\数据转换.pdb
+F:\兴趣项目\数据转换\obj\Debug\数据转换.csprojResolveAssemblyReference.cache
